@@ -18,4 +18,5 @@ def controll():
     return 'true'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=False)
+#    app.run(host='0.0.0.0', port=8000, debug=False)
+    app.run(host='0.0.0.0', port=334, ssl_context=('server.crt', 'server.key'), threaded=True, debug=True)

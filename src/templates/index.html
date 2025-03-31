@@ -61,6 +61,8 @@
       </form>
       -->
       <button onclick="run_python()" class="btn btn-primary btn-custom-rounded btn-dark mt-5">Run on Rpi</button>
+      <button onclick="saveBlock()">Save Block</button>
+      <button onclick="loadBlock()">Open Block</button>
     </p>
 
     <div id="blocklyDiv" style="height: 480px; width: 600px"></div>
@@ -345,6 +347,45 @@
 //          alert(e);
 //        }
 //      }
+
+      async function saveBlock(){
+//      button.addEventListener('click', async () => {
+        const opts = {
+          suggestedName: 'example',
+          types: [{
+            description: 'Text file',
+            accept: {'text/plain': ['.txt']},
+          }],
+        };
+        const data = Blockly.serialization.workspaces.save(demoWorkspace);
+        console.log(JSON.stringify(data))
+        const handle = await window.showSaveFilePicker(opts);
+        const writable = await handle.createWritable()
+//        await writable.write(textarea.value)
+        await writable.write(JSON.stringify(data))
+        await writable.close()
+//      })
+      }
+
+      async function loadBlock(){
+        const [handle] = await window.showOpenFilePicker({
+          types: [{
+            description: 'Text file',
+            accept: {
+              'text/plain*': [
+                '.txt'
+              ]
+            }
+          }]
+        })
+        const file = await handle.getFile();
+        const text = await file.text();
+        console.log(text)
+        Blockly.Events.disable();
+        Blockly.serialization.workspaces.load(JSON.parse(text), demoWorkspace);
+        Blockly.Events.enable();
+      }
+
     </script>
   </body>
 </html>
