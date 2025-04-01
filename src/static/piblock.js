@@ -20,3 +20,11 @@ python.pythonGenerator.forBlock['gpio_out_ctl'] = function(block, generator) {
 	+ 'pi.write(' + value_gpiopin + ', ' + dropdown_gpioval + ');';
   return code;
 }
+
+python.pythonGenerator.forBlock['sleep'] = function(block, generator) {
+  const number_sec = block.getFieldValue('sec');
+  // TODO: Assemble python into the code variable.
+//  const code = 'from time import sleep;';
+  const code = 'sleep(' + number_sec + ');';
+  return code;
+}

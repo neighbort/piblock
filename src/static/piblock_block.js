@@ -35,3 +35,17 @@ const gpio_out_ctl = {
   }
 };
 Blockly.common.defineBlocks({gpio_out_ctl: gpio_out_ctl});
+
+const sleep = {
+  init: function() {
+    this.appendDummyInput('length')
+      .appendField(new Blockly.FieldNumber(1, 0, Infinity, 1), 'sec')
+      .appendField('sec sleep');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(0);
+  }
+};
+Blockly.common.defineBlocks({sleep: sleep});
