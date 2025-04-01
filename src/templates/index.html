@@ -26,6 +26,10 @@
     <!-- add 0331 -->
     <script>
 	const socket = io("wss://192.168.11.11:334");
+
+	socket.on("output", (data) => {
+            console.log(data);
+        });
     </script>
     <!-- add 0331 -->
 
@@ -340,9 +344,6 @@
       }
 
 // add 0331 from here
-//	const socket = io();
-//     	const socket = io("wss://192.168.11.11:334");
-
         function sendCode() {
 //            const code = document.getElementById("codeInput").value
 //            document.getElementById("output").innerText = "実行中...";
@@ -351,11 +352,6 @@
           	  python.pythonGenerator.workspaceToCode(demoWorkspace);
 		socket.emit('run_code', code);
         }
-
-        socket.on('output', function (data) {
-//            document.getElementById("output").innerText = data;
-		console.log(data);
-        });
 // add 0331 by here
 
       async function saveBlock(){
