@@ -22,6 +22,14 @@ python.pythonGenerator.forBlock['gpio_out_ctl'] = function(block, generator) {
   return code;
 }
 
+python.pythonGenerator.forBlock['gpio_read_status'] = function(block, generator) {
+  const number_pin = block.getFieldValue('pin');
+  // TODO: Assemble python into the code variable.
+  const code = 'pi.read(' + number_pin + ')';
+  // TODO: Change Order.NONE to the correct operator precedence strength
+  return [code, python.Order.NONE];
+}
+
 python.pythonGenerator.forBlock['sleep'] = function(block, generator) {
   const number_sec = block.getFieldValue('sec');
   // TODO: Assemble python into the code variable.

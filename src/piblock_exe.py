@@ -2,10 +2,9 @@ from flask import Flask, Response, request, redirect, url_for, render_template, 
 from flask_socketio import SocketIO     # add 0331
 import threading                        # add 0331
 import json
-#import pigpio
-#from time import sleep
 import sys
 import io
+
 
 # Set up Web Server
 app = Flask(__name__)
@@ -26,9 +25,23 @@ def controll():
         return 'Error: ' + str(e)
 
 
+class StreamRedirector:
+    """ class to send stdout through WebSocket in real time """
+    def __init__(self):
+        self.buffer = ""
+
+    def write(self, message):
+        if message.strip():     # avoid ampty buffer
+            socketio.emit("output", {"message": message}, broadcast=True)
+
+    def flush(self):
+        pass                    # do nothing to avoid buffer
+
+
 def execute_code(code):                 # add 0331
     old_stdout = sys.stdout
-    sys.stdout = io.StringIO()          # capture stdio
+#    sys.stdout = io.StringIO()          # capture stdio, commented out 0402
+    sys.stdout = StreamRedirector()     # add 0402
     try:
         exec(code, {"socketio": socketio})  # activate socketio in exec
         output = sys.stdout.getvalue()
@@ -36,7 +49,7 @@ def execute_code(code):                 # add 0331
         output = f"Error: {str(e)}"
     finally:
         sys.stdout = old_stdout         # stdio normalise
-    socketio.emit('output', output)     # send result to client
+#    socketio.emit('output', output)     # send result to client, commented out 0402
 
 @socketio.on('run_code')                # add 0331
 def handle_code(code):

@@ -36,6 +36,19 @@ const gpio_out_ctl = {
 };
 Blockly.common.defineBlocks({gpio_out_ctl: gpio_out_ctl});
 
+const gpio_read_status = {
+  init: function() {
+    this.appendDummyInput('explanation')
+      .appendField('status of GPIO pin')
+      .appendField(new Blockly.FieldNumber(12, 0, 27), 'pin');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({gpio_read_status: gpio_read_status});
+
 const sleep = {
   init: function() {
     this.appendDummyInput('length')
