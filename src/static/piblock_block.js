@@ -35,3 +35,49 @@ const gpio_out_ctl = {
   }
 };
 Blockly.common.defineBlocks({gpio_out_ctl: gpio_out_ctl});
+
+const gpio_set_read = {
+  init: function() {
+    this.appendDummyInput('explanation')
+      .appendField('set GPIO No. ')
+      .appendField(new Blockly.FieldNumber(0, 0, 27), 'pin')
+      .appendField('reading mode')
+      .appendField(new Blockly.FieldDropdown([
+          ['high', '1'],
+          ['low', '0']
+        ]), 'pud');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({gpio_set_read: gpio_set_read});
+
+const gpio_read_status = {
+  init: function() {
+    this.appendDummyInput('explanation')
+      .appendField('status of GPIO pin')
+      .appendField(new Blockly.FieldNumber(12, 0, 27), 'pin');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({gpio_read_status: gpio_read_status});
+
+const sleep = {
+  init: function() {
+    this.appendDummyInput('length')
+      .appendField(new Blockly.FieldNumber(1, 0, Infinity, 1), 'sec')
+      .appendField('sec sleep');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(0);
+  }
+};
+Blockly.common.defineBlocks({sleep: sleep});
