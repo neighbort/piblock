@@ -15,10 +15,21 @@ python.pythonGenerator.forBlock['gpio_out_ctl'] = function(block, generator) {
   const dropdown_gpioval = block.getFieldValue('gpioval');
 //  console.log(dropdown_gpioval);
   // TODO: Assemble javascript into the code variable.
-  const code = 'import pigpio;'
-	+ 'pi = pigpio.pi();'
-	+ 'pi.set_mode(' + value_gpiopin + ', pigpio.OUTPUT);'
-	+ 'pi.write(' + value_gpiopin + ', ' + dropdown_gpioval + ');';
+  const code = 'import pigpio\n'
+	+ 'pi = pigpio.pi()\n'
+	+ 'pi.set_mode(' + value_gpiopin + ', pigpio.OUTPUT)\n'
+	+ 'pi.write(' + value_gpiopin + ', ' + dropdown_gpioval + ')\n';
+  return code;
+}
+
+python.pythonGenerator.forBlock['gpio_set_read'] = function(block, generator) {
+  const number_pin = block.getFieldValue('pin');
+  const dropdown_pud = block.getFieldValue('pud');
+  // TODO: Assemble python into the code variable.
+  const code = 'import pigpio\n'
+	+ 'pi = pigpio.pi()\n'
+	+ 'pi.set_mode(' + number_pin + ', pigpio.INPUT)\n'
+	+ 'pi.set_pull_up_down(' + number_pin + ', pigpio.PUD_UP) if ' + dropdown_pud + '== 1 else pi.set_pull_up_down(' + number_pin + ', pigpio.PUD_DOWN)\n';
   return code;
 }
 
@@ -34,7 +45,7 @@ python.pythonGenerator.forBlock['sleep'] = function(block, generator) {
   const number_sec = block.getFieldValue('sec');
   // TODO: Assemble python into the code variable.
 //  const code = 'from time import sleep;';
-  const code = 'from time import sleep;'
-	+ 'sleep(' + number_sec + ');';
+  const code = 'from time import sleep\n'
+	+ 'sleep(' + number_sec + ')\n';
   return code;
 }
