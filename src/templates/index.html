@@ -78,6 +78,12 @@
       <button onclick="loadBlock()">Open Block</button>
     </p>
 
+    <p>
+      <button onclick="ConnJoyCon()"> Register JoyCon</button>
+      <button onclick="getPaired()"> Paired Devices</button>
+      <ul id="paired-list"></ul>
+    </p>
+
     <div id="blocklyDiv" style="height: 480px; width: 600px"></div>
 
     <script>
@@ -398,6 +404,78 @@
         Blockly.Events.disable();
         Blockly.serialization.workspaces.load(JSON.parse(text), demoWorkspace);
         Blockly.Events.enable();
+      }
+
+      async function getPaired() {
+        const res = await fetch("/paired");
+        const devices = await res.json();
+        const list = document.getElementById("paired-list");
+        list.innerHTML = "";
+
+        devices.forEach(device => {
+        const item = document.createElement("li");
+        item.textContent = `${device.name} [${device.mac}] `;
+
+        const connectBtn = document.createElement("button");
+        connectBtn.textContent = "接続";
+        connectBtn.onclick = () => connect(device.mac);
+        item.appendChild(connectBtn);
+
+        const disconnectBtn = document.createElement("button");
+        disconnectBtn.textContent = "切断";
+        disconnectBtn.onclick = () => disconnect(device.mac);
+        item.appendChild(disconnectBtn);
+
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "削除";
+        removeBtn.onclick = () => remove(device.mac);
+        item.appendChild(removeBtn);
+
+        list.appendChild(item);
+        });
+      }
+
+
+      async function ConnJoyCon() {
+	alert('make Joy-Con stand-by mode');
+	const res = await fetch("/scan-connect", {
+	  method: "POST",
+	  headers: { "Content-Type": "application/json"},
+	});
+	const result = await res.json();
+	console.log(result.result || result.error);
+      }
+
+      async function connect(mac) {
+	alert('make device stand-by mode');
+        const res = await fetch("/connect", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mac: mac })
+        });
+        const result = await res.json();
+        console.log(result.result || result.error);
+      }
+
+      async function disconnect(mac) {
+        const res = await fetch("/disconnect", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mac: mac })
+        });
+        const result = await res.json();
+        console.log(result.result || result.error);
+      }
+
+      async function remove(mac) {
+        const res = await fetch("/remove", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mac: mac })
+      });
+      const result = await res.json();
+      console.log(result.result || result.error);
+      getPaired(); // リストを更新
       }
 
     </script>
