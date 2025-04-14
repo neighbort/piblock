@@ -4,6 +4,7 @@ import threading                        # add 0331
 import json
 import sys
 import io
+import ctl_bluetooth as myblue
 
 
 # Set up Web Server
@@ -54,6 +55,37 @@ def execute_code(code):                 # add 0331
 @socketio.on('run_code')                # add 0331
 def handle_code(code):
     threading.Thread(target=execute_code, args=(code,)).start()
+
+
+@app.route("/scan-connect", methods=["POST"])
+def scan_connect():
+    print("here comes the sun")
+    stdout = myblue.scan_and_connect_to_joycon()
+    return jsonify({"result": stdout})
+
+@app.route("/paired", methods=["GET"])
+def paired_devices():
+    devices = myblue.get_paired_devices()
+    return jsonify(devices)
+
+@app.route("/connect", methods=["POST"])
+def connect():
+    mac = request.json.get("mac")
+    print(mac)
+    stdout = myblue.connect_to_device(mac)
+    print(stdout)
+    return jsonify({"result": stdout})
+
+@app.route("/disconnect", methods=["POST"])
+def disconnect():
+    stdout = myblue.disconnect_current_device()
+    return jsonify({"result": stdout})
+
+@app.route("/remove", methods=["POST"])
+def remove():
+    mac = request.json.get("mac")
+    stdout = myblue.remove_device(mac)
+    return jsonify({"result": stdout})
 
 
 if __name__ == '__main__':
