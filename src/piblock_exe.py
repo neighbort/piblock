@@ -5,11 +5,16 @@ import json
 import sys
 import io
 import ctl_bluetooth as myblue
+import ctl_gpio as mygpio
+from multiprocessing import Process, Queue
+import time
 
 
 # Set up Web Server
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode="threading")  # add 0331
+
+current_process = None
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -26,8 +31,9 @@ def controll():
         return 'Error: ' + str(e)
 
 
+"""
 class StreamRedirector:
-    """ class to send stdout through WebSocket in real time """
+# class to send stdout through WebSocket in real time
     def __init__(self):
         self.buffer = ""
 
@@ -52,9 +58,55 @@ def execute_code(code):                 # add 0331
         sys.stdout = old_stdout         # stdio normalise
 #    socketio.emit('output', output)     # send result to client, commented out 0402
 
+
 @socketio.on('run_code')                # add 0331
 def handle_code(code):
     threading.Thread(target=execute_code, args=(code,)).start()
+"""
+
+### add 0416 for terminate process
+def stream_exec_code(code, output_queue):
+    class StreamRedirector:
+        def write(self, message):
+            output_queue.put(message)
+        def flush(self):
+            pass
+    sys.stdout = StreamRedirector()
+    try:
+        exec(code)
+    except Exception as e:
+        output_queue.put(f"Error: {str(e)}")
+    finally:
+        output_queue.put("__end__")
+
+@socketio.on("run_code")
+def handle_code(code):
+    global current_process
+    if current_process and current_process.is_alive():
+        socketio.emit("output", {"message": "Error: Another process is still running."})
+        return
+    output_queue = Queue()
+    current_process = Process(target=stream_exec_code, args=(code, output_queue))
+    current_process.start()
+    def stream_output():
+        while True:
+            message = output_queue.get()
+            if message == "__end__":
+                break
+            socketio.emit("output", {"message": message})
+        current_process.join()
+    socketio.start_background_task(stream_output)
+
+@socketio.on("stop_code")
+def stop_code():
+    global current_process
+    if current_process and current_process.is_alive():
+        current_process.terminate()
+        socketio.emit("output", {"message": "Code execution was forcibly stopped."})
+    else:
+        socketio.emit("output", {"message": "No running code to stop."})
+    mygpio.set_gpio_default()
+### terminate process code by here
 
 
 @app.route("/scan-connect", methods=["POST"])

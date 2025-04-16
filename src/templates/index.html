@@ -74,6 +74,7 @@
       -->
       <button onclick="run_python()" class="btn btn-primary btn-custom-rounded btn-dark mt-5">Run on Rpi</button>
       <button onclick="sendCode()">Run on Rpi socket</button>
+      <button onclick="terminateCode()">Terminate</button>
       <button onclick="saveBlock()">Save Block</button>
       <button onclick="loadBlock()">Open Block</button>
     </p>
@@ -367,6 +368,12 @@
 		socket.emit('run_code', code);
         }
 // add 0331 by here
+
+// add 0416 from here
+	function terminateCode() {
+    		socket.emit("stop_code");
+	}
+// add 0416 by here
 
       async function saveBlock(){
 //      button.addEventListener('click', async () => {
