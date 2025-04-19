@@ -116,6 +116,14 @@
                 kind: 'block',
                 type: 'logic_boolean',
               },
+	      {
+		kind: 'block',
+		type: 'logic_null',
+	      },
+	      {
+		kind: 'block',
+		type: 'logic_ternary',
+	      },
             ],
           },
           {
@@ -171,6 +179,10 @@
                   },
                 },
               },
+	      {
+		kind: 'block',
+		type: 'controls_forEach',
+	      },
               {
                 kind: 'block',
                 type: 'controls_flow_statements'
@@ -276,12 +288,55 @@
               },
             ],
           },
+	  {
+	    kind: 'category',
+	    name: 'Lists',
+	    categorystyle: 'list_category',
+	    contents: [
+	      {
+		kind: 'block',
+		type: 'lists_create_with',
+	      },
+	      {
+          	kind: 'block',
+          	type: 'lists_repeat',
+          	inputs: {
+            	  NUM: {
+              	    shadow: {
+                      type: 'math_number',
+                      fields: {
+                  	NUM: 5,
+                      },
+                    },
+                  },
+                },
+              },
+	      {
+		kind: 'block',
+		type: 'lists_length',
+	      },
+	      {
+		kind: 'block',
+		type: 'lists_sort',
+	      },
+	      {
+		kind: 'block',
+		type: 'lists_reverse',
+	      },
+	    ],
+	  },
           {
             kind: 'category',
             name: 'Variables',
             categorystyle: 'variable_category',
             custom: 'VARIABLE',
           },
+	  {
+	    kind: 'category',
+      	    name: 'Functions',
+            categorystyle: 'procedure_category',
+            custom: 'PROCEDURE',
+	  },
           {
             kind: 'category',
             name: 'RPi',
@@ -313,6 +368,25 @@
 	      },
             ],
           },
+	  {
+	    kind: 'category',
+	    name: 'JoyCon',
+	    categorystyle: 'text_category',
+	    contents: [
+	      {
+		kind: 'block',
+		type: 'boot_JoyCon_input',
+	      },
+	      {
+		kind: 'block',
+		type: 'test_statement',
+	      },
+	      {
+		kind: 'block',
+		type: 'my_PiController',
+	      },
+	    ]
+	  },
         ],
       };
 

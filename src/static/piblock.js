@@ -49,3 +49,46 @@ python.pythonGenerator.forBlock['sleep'] = function(block, generator) {
 	+ 'sleep(' + number_sec + ')\n';
   return code;
 }
+
+python.pythonGenerator.forBlock['boot_JoyCon_input'] = function(block, generator) {
+  const dropdown_device_name = block.getFieldValue('device_name');
+  // TODO: Assemble python into the code variable.
+  const code = 'from evdev import InputDevice, categorize, ecodes, list_devices\n'
+	+ 'print(list_devices())\n'
+	+ 'joycon = False\n'
+	+ 'for path in list_devices():\n'
+	+ '\tprint(InputDevice(path).name, path)\n'
+	+ '\tif "' + dropdown_device_name + '" in InputDevice(path).name:\n'
+	+ '\t\tjoycon = InputDevice(path)\n'
+	+ '\t\tjoycon_name = joycon.name\n'
+	+ '\t\tbreak\n'
+	+ 'print("Failed, please connect the Joy-Con to RaspberryPi") if not joycon else print("Success !")\n';
+  return code;
+}
+
+python.pythonGenerator.forBlock['test_statement'] = function(block, generator) {
+  // TODO: change Order.ATOMIC to the correct operator precedence strength
+  const value_bol = generator.valueToCode(block, 'bol', python.Order.ATOMIC);
+
+  const statement_iftrue = generator.statementToCode(block, 'iftrue');
+
+  const statement_ifalse = generator.statementToCode(block, 'ifalse');
+
+  // TODO: Assemble python into the code variable.
+  const code = 'print("start")\n'
+	+ 'if ' + value_bol + ' == True:\n'
+	+ statement_iftrue + '\n'
+	+ 'elif ' + value_bol + ' == False:\n'
+	+ statement_ifalse + '\n';
+  return code;
+}
+
+python.pythonGenerator.forBlock['my_PiController'] = function(block, generator) {
+  const statement_north = generator.statementToCode(block, 'north');
+  const statement_south = generator.statementToCode(block, 'south');
+  // TODO: Assemble python into the code variable.
+  const code = 'print("Listening!")\n'
+	+ 'for event in joycon.read_loop():\n'
+	+ '\tprint(categorize(event))\n';
+  return code;
+}

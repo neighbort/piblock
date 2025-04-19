@@ -81,3 +81,64 @@ const sleep = {
   }
 };
 Blockly.common.defineBlocks({sleep: sleep});
+
+const boot_JoyCon_input = {
+  init: function() {
+    this.appendDummyInput('explanation')
+      .appendField('start listening to')
+      .appendField(new Blockly.FieldDropdown([
+          ['Joy-Con', 'Joy-Con'],
+          ['Joy-Con(R)', 'Joy-Con(R)'],
+          ['Joy-Con(L)', 'Joy-Con(L)']
+        ]), 'device_name')
+      .appendField('command');
+    this.setInputsInline(true)
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({boot_JoyCon_input: boot_JoyCon_input});
+
+const test_statement = {
+  init: function() {
+    this.appendValueInput('bol');
+    this.appendDummyInput('exp1')
+      .appendField('IF True');
+    this.appendStatementInput('iftrue')
+      .appendField('do');
+    this.appendDummyInput('exp2')
+      .appendField('IF False');
+    this.appendStatementInput('ifalse')
+      .appendField('do');
+    this.setInputsInline(false)
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({test_statement: test_statement});
+
+const my_PiController = {
+  init: function() {
+    this.appendDummyInput('exp1')
+      .appendField('If north');
+    this.appendStatementInput('north')
+      .appendField('do');
+    this.appendDummyInput('exp2')
+      .appendField('If south');
+    this.appendStatementInput('south')
+      .appendField('do');
+    this.setInputsInline(false)
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({my_PiController: my_PiController});
