@@ -89,6 +89,24 @@ python.pythonGenerator.forBlock['my_PiController'] = function(block, generator) 
   // TODO: Assemble python into the code variable.
   const code = 'print("Listening!")\n'
 	+ 'for event in joycon.read_loop():\n'
-	+ '\tprint(categorize(event))\n';
+	+ statement_north + '\n';
+//	+ '\tprint(categorize(event))\n'
+//	+ '\tif event.type == ecodes.EV_KEY:\n'
+//	+ '\t\tif "NORTH" in categorize(event).keycode[0] and categorize(event).keystate == 0 :\n'
+//	+ '\t\t\tprint("X pushed")\n';
+  return code;
+}
+
+python.pythonGenerator.forBlock['button_handler_joyconR'] = function(block, generator) {
+  const dropdown_name = block.getFieldValue('name');
+  const dropdown_state = block.getFieldValue('state');
+  const statement_action = generator.statementToCode(block, 'action');
+  // TODO: Assemble python into the code variable.
+//  const code = 'if event.type == ecodes.EV_KEY:\n'
+  const code = 'keyev = categorize(event)\n'
+//	+ '\tkeyev = categorize(event)\n'
+	+ 'print(keyev)\n'
+	+ 'if event.type == ecodes.EV_KEY and "' + dropdown_name + '" in keyev.keycode[0] and keyev.keystate == ' + dropdown_state + ':\n'
+	+ statement_action + '\n';
   return code;
 }

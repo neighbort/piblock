@@ -142,3 +142,30 @@ const my_PiController = {
   }
 };
 Blockly.common.defineBlocks({my_PiController: my_PiController});
+
+const button_handler_joyconR = {
+  init: function() {
+    this.appendDummyInput('exp1')
+      .appendField('if button')
+      .appendField(new Blockly.FieldDropdown([
+          ['X', 'NORTH'],
+          ['A', 'EAST'],
+          ['B', 'SOUTH'],
+          ['Y', 'WEST']
+        ]), 'name')
+      .appendField('is')
+      .appendField(new Blockly.FieldDropdown([
+          ['push', '1'],
+          ['release', '0']
+        ]), 'state');
+    this.appendStatementInput('action')
+      .appendField('do');
+    this.setInputsInline(false)
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({button_handler_joyconR: button_handler_joyconR});
