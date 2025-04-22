@@ -82,26 +82,6 @@ const sleep = {
 };
 Blockly.common.defineBlocks({sleep: sleep});
 
-const boot_JoyCon_input = {
-  init: function() {
-    this.appendDummyInput('explanation')
-      .appendField('start listening to')
-      .appendField(new Blockly.FieldDropdown([
-          ['Joy-Con', 'Joy-Con'],
-          ['Joy-Con(R)', 'Joy-Con(R)'],
-          ['Joy-Con(L)', 'Joy-Con(L)']
-        ]), 'device_name')
-      .appendField('command');
-    this.setInputsInline(true)
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setTooltip('');
-    this.setHelpUrl('');
-    this.setColour(225);
-  }
-};
-Blockly.common.defineBlocks({boot_JoyCon_input: boot_JoyCon_input});
-
 const test_statement = {
   init: function() {
     this.appendValueInput('bol');
@@ -126,13 +106,14 @@ Blockly.common.defineBlocks({test_statement: test_statement});
 const my_PiController = {
   init: function() {
     this.appendDummyInput('exp1')
-      .appendField('If north');
-    this.appendStatementInput('north')
-      .appendField('do');
-    this.appendDummyInput('exp2')
-      .appendField('If south');
-    this.appendStatementInput('south')
-      .appendField('do');
+      .appendField('device_name')
+      .appendField(new Blockly.FieldDropdown([
+          ['Joy-Con', 'Joy-Con'],
+          ['Joy-Con(R)', 'Joy-Con(R)'],
+          ['Joy-Con(L)', 'Joy-Con(L)']
+        ]), 'name');
+    this.appendStatementInput('command')
+      .appendField('set command');
     this.setInputsInline(false)
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -143,6 +124,7 @@ const my_PiController = {
 };
 Blockly.common.defineBlocks({my_PiController: my_PiController});
 
+
 const button_handler_joyconR = {
   init: function() {
     this.appendDummyInput('exp1')
@@ -151,7 +133,7 @@ const button_handler_joyconR = {
           ['X', 'NORTH'],
           ['A', 'EAST'],
           ['B', 'SOUTH'],
-          ['Y', 'WEST']
+          ['Y', 'WEST'],
         ]), 'name')
       .appendField('is')
       .appendField(new Blockly.FieldDropdown([
@@ -169,3 +151,30 @@ const button_handler_joyconR = {
   }
 };
 Blockly.common.defineBlocks({button_handler_joyconR: button_handler_joyconR});
+
+const buton_handler_joyconL = {
+  init: function() {
+    this.appendDummyInput('expl')
+      .appendField('if  button')
+      .appendField(new Blockly.FieldDropdown([
+          ['up', 'UP'],
+          ['right', 'RIGHT'],
+          ['down', 'DOWN'],
+          ['left', 'LEFT'],
+          ['L', 'TL']
+        ]), 'name')
+      .appendField('is')
+      .appendField(new Blockly.FieldDropdown([
+          ['push', '1'],
+          ['release', '0']
+        ]), 'state');
+    this.appendStatementInput('action')
+      .appendField('do');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({buton_handler_joyconL: buton_handler_joyconL});
