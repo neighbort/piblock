@@ -42,50 +42,50 @@
         font-weight: normal;
         font-size: 140%;
       }
+      pre {
+        background-color: #111;
+        color: #0f0;
+        padding: 10px;
+        border-radius: 4px;
+        overflow-y: auto;
+        margin-top: 10px;
+        white-space: pre-wrap;
+      }
     </style>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   </head>
   <body>
     <p>
-      This is a simple demo of generating code from blocks and running the code
-      using eval.
+      This is a simple demo of generating and exec code from blocks
     </p>
-
-    <p>
-      &rarr; More info on
-      <a
-        href="https://developers.google.com/blockly/guides/configure/web/code-generators"
-        >Code Generators</a
-      >
-      and
-      <a
-        href="https://developers.google.com/blockly/guides/app-integration/running-javascript"
-        >Running JavaScript</a
-      >.
-    </p>
-
-    <p>
-      <button onclick="showCode()">Show Python Code</button>
-      <!--
-      <button onclick="runCode()">Run JavaScript</button>
-      <form action='/jsonrpi' method='post'>
-        <input id='example' type='hidden' name='name'>
-	<input type='submit' value='Run JS on Rpi' onclick="returnCode()">
-      </form>
-      -->
-      <button onclick="run_python()" class="btn btn-primary btn-custom-rounded btn-dark mt-5">Run on Rpi</button>
-      <button onclick="sendCode()">Run on Rpi socket</button>
-      <button onclick="terminateCode()">Terminate</button>
-      <button onclick="saveBlock()">Save Block</button>
-      <button onclick="loadBlock()">Open Block</button>
-    </p>
-
-    <p>
-      <button onclick="ConnJoyCon()"> Register JoyCon</button>
-      <button onclick="getPaired()"> Paired Devices</button>
-      <ul id="paired-list"></ul>
-    </p>
-
-    <div id="blocklyDiv" style="height: 480px; width: 600px"></div>
+    <div id="pageContainer">
+      <div id="consoleDiv">
+        <p>
+          <button onclick="showCode()">Show Python Code</button>
+          <!--
+          <button onclick="runCode()">Run JavaScript</button>
+          <form action='/jsonrpi' method='post'>
+            <input id='example' type='hidden' name='name'>
+  	  <input type='submit' value='Run JS on Rpi' onclick="returnCode()">
+          </form>
+          -->
+          <button onclick="run_python()" class="btn btn-primary btn-custom-rounded btn-dark mt-5">Run on Rpi</button>
+          <button onclick="sendCode()">Run on Rpi socket</button>
+          <button onclick="terminateCode()">Terminate</button>
+          <button onclick="saveBlock()">Save Block</button>
+          <button onclick="loadBlock()">Open Block</button>
+        </p>
+        <p>
+          <button onclick="ConnJoyCon()"> Register JoyCon</button>
+          <button onclick="getPaired()"> Paired Devices</button>
+          <ul id="paired-list"></ul>
+        </p>
+        <h3>Console Output:</h3>
+	<pre id="output">(COnsole will appear here...)</pre>
+      </div>
+      <div id="blocklyDiv"></div>
+    </div>
 
     <script>
       var toolbox = {
@@ -436,25 +436,24 @@
 	  .then(data => console.log(data))
       }
 
-// add 0331 from here
         function sendCode() {
-//            const code = document.getElementById("codeInput").value
-//            document.getElementById("output").innerText = "実行中...";
             	python.pythonGenerator.INFINITE_LOOP_TRAP = null;
 		var code =
           	  python.pythonGenerator.workspaceToCode(demoWorkspace);
 		socket.emit('run_code', code);
         }
-// add 0331 by here
 
-// add 0416 from here
+	socket.on("output", (data) => {
+		const outputElem = document.getElementById("output");
+    		outputElem.textContent += data.message + "\n";
+    		outputElem.scrollTop = outputElem.scrollHeight;  // auto-scroll
+  	});
+
 	function terminateCode() {
     		socket.emit("stop_code");
 	}
-// add 0416 by here
 
       async function saveBlock(){
-//      button.addEventListener('click', async () => {
         const opts = {
           suggestedName: 'example',
           types: [{
@@ -466,10 +465,8 @@
         console.log(JSON.stringify(data))
         const handle = await window.showSaveFilePicker(opts);
         const writable = await handle.createWritable()
-//        await writable.write(textarea.value)
         await writable.write(JSON.stringify(data))
         await writable.close()
-//      })
       }
 
       async function loadBlock(){
