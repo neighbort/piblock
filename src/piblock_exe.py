@@ -72,11 +72,14 @@ def stream_exec_code(code, output_queue):
         def flush(self):
             pass
     sys.stdout = StreamRedirector()
+    output_queue.put("\n***** Run Program You Built! *****")
     try:
         exec(code)
     except Exception as e:
         output_queue.put(f"Error: {str(e)}")
     finally:
+        output_queue.put("+++++ Finish +++++")
+        mygpio.set_gpio_default()
         output_queue.put("__end__")
 
 @socketio.on("run_code")

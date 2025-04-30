@@ -326,6 +326,25 @@
 	      },
 	    ],
 	  },
+	  {
+	    kind: 'category',
+	    name: 'Excutables',
+	    categorystyle: 'text_category',
+	    contents: [
+	      {
+		kind: 'block',
+		type: 'text_print',
+	      },
+	      {
+		kind: 'block',
+		type: 'sleep'
+	      },
+	      {
+		kind: 'block',
+		type: 'do_nothing',
+	      },
+	    ],
+	  },
           {
             kind: 'category',
             name: 'Variables',
@@ -357,7 +376,11 @@
 	      },
 	      {
 		kind: 'block',
-		type: 'sleep',
+		type: 'gpio_pwm_ctl',
+	      },
+	      {
+		kind: 'block',
+		type: 'gpio_servo_ctl',
 	      },
             ],
           },
@@ -382,7 +405,7 @@
 		kind: 'block',
 		type: 'buton_handler_joyconL',
 	      },
-	    ]
+	    ],
 	  },
         ],
       };
@@ -433,6 +456,8 @@
             	python.pythonGenerator.INFINITE_LOOP_TRAP = null;
 		var code =
           	  python.pythonGenerator.workspaceToCode(demoWorkspace);
+//		const outputElm = document.getElementByID("output");
+//		outputElm.textContent += "***** Run Program *****"
 		socket.emit('run_code', code);
         }
 
@@ -556,4 +581,3 @@
     </script>
   </body>
 </html>
-

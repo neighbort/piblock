@@ -39,12 +39,52 @@ python.pythonGenerator.forBlock['gpio_read_status'] = function(block, generator)
   return [code, python.Order.NONE];
 }
 
+python.pythonGenerator.forBlock['gpio_pwm_ctl'] = function(block, generator) {
+  const dropdown_pin = block.getFieldValue('pin');
+  // TODO: change Order.ATOMIC to the correct operator precedence strength
+  const value_duty = generator.valueToCode(block, 'duty', python.Order.ATOMIC);
+  // TODO: change Order.ATOMIC to the correct operator precedence strength
+  const value_freq = generator.valueToCode(block, 'freq', python.Order.ATOMIC);
+  // TODO: Assemble python into the code variable.
+  const code = 'import pigpio\n'
+	+ 'pi = pigpio.pi()\n'
+	+ 'if ' + value_duty + '<0 or 100<' + value_duty + ':\n'
+	+ '\tduty=0\n'
+	+ 'else:\n'
+	+ '\tduty=int(' + value_duty + '*1000000/100)\n'
+	+ 'if ' + value_freq + '<0 or 2e+07<' + value_freq + ':\n'
+	+ '\tfreq=0\n'
+	+ 'else:\n'
+	+ '\tfreq=' + value_freq + '\n'
+	+ 'pi.hardware_PWM(' + dropdown_pin + ', freq, duty)\n';
+  return code;
+}
+
+python.pythonGenerator.forBlock['gpio_servo_ctl'] = function(block, generator) {
+  const dropdown_pin = block.getFieldValue('pin');
+  const number_pulse = block.getFieldValue('pulse');
+  // TODO: Assemble python into the code variable.
+  const code = 'import pigpio\n'
+	+ 'pi = pigpio.pi()\n'
+	+ 'if ' + number_pulse + '<500:\n'
+	+ '\tpi.set_servo_pulsewidth(' + dropdown_pin + ', 0)\n'
+	+ 'else:\n'
+	+ '\tpi.set_servo_pulsewidth(' + dropdown_pin + ', ' + number_pulse + ')\n';
+  return code;
+}
+
 python.pythonGenerator.forBlock['sleep'] = function(block, generator) {
   const number_sec = block.getFieldValue('sec');
   // TODO: Assemble python into the code variable.
 //  const code = 'from time import sleep;';
   const code = 'from time import sleep\n'
 	+ 'sleep(' + number_sec + ')\n';
+  return code;
+}
+
+ython.pythonGenerator.forBlock['do_nothing'] = function(block, generator) {
+  // TODO: Assemble python into the code variable.
+  const code = 'pass';
   return code;
 }
 

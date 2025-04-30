@@ -67,6 +67,50 @@ const gpio_read_status = {
 };
 Blockly.common.defineBlocks({gpio_read_status: gpio_read_status});
 
+const gpio_pwm_ctl = {
+  init: function() {
+    this.appendValueInput('duty')
+    .setCheck('Number')
+      .appendField('set  GPIO No. ')
+      .appendField(new Blockly.FieldDropdown([
+          ['12(PWM0)', '12'],
+          ['18(PWM0)', '18'],
+          ['13(PWM1)', '13']
+        ]), 'pin')
+      .appendField('PWM with Duty');
+    this.appendDummyInput('expl1')
+      .appendField('%, and Freq');
+    this.appendValueInput('freq')
+    .setCheck('Number');
+    this.appendDummyInput('expl2')
+      .appendField('Hz');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(210);
+  }
+};
+Blockly.common.defineBlocks({gpio_pwm_ctl: gpio_pwm_ctl});
+
+const gpio_servo_ctl = {
+  init: function() {
+    this.appendDummyInput('explanation')
+      .appendField('set GPIO No. ')
+      .appendField(new Blockly.FieldDropdown([
+          ['12(PWM0)', '12'],
+          ['18(PWM0)', '18'],
+          ['13(PWM1)', '13']
+        ]), 'pin')
+      .appendField('to servo ctl. pulse')
+      .appendField(new Blockly.FieldNumber(0, 0, 2500), 'pulse');
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(75);
+  }
+};
+Blockly.common.defineBlocks({gpio_servo_ctl: gpio_servo_ctl});
+
 const sleep = {
   init: function() {
     this.appendDummyInput('length')
@@ -80,6 +124,19 @@ const sleep = {
   }
 };
 Blockly.common.defineBlocks({sleep: sleep});
+
+const do_nothing = {
+  init: function() {
+    this.appendDummyInput('explanation')
+      .appendField('do nothing');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(45);
+  }
+};
+Blockly.common.defineBlocks({do_nothing: do_nothing});
 
 const test_statement = {
   init: function() {
