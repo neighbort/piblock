@@ -25,7 +25,8 @@
 
     <!-- add 0331 -->
     <script>
-	const socket = io("wss://192.168.11.11:334");
+//	const socket = io("wss://192.168.11.11:334");
+	const socket = io();
 
 	socket.on("output", (data) => {
             console.log(data);
@@ -82,7 +83,7 @@
           <ul id="paired-list"></ul>
         </p>
         <h3>Console Output:</h3>
-	<pre id="output">(COnsole will appear here...)</pre>
+	<pre id="output">(Console will appear here...)</pre>
       </div>
       <div id="blocklyDiv"></div>
     </div>
@@ -342,14 +343,6 @@
             name: 'RPi',
             categorystyle: 'text_category',
             contents: [
-              {
-                kind: 'block',
-                type: 'text_print',
-              },
-              {
-                kind: 'block',
-                type: 'average',
-              },
 	      {
                 kind: 'block',
 		type: 'gpio_out_ctl',

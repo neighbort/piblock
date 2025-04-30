@@ -18,11 +18,10 @@ Blockly.common.defineBlocks({average: average});
 
 const gpio_out_ctl = {
   init: function() {
-    this.appendValueInput('gpiopin')
-    .setCheck('Number')
-      .appendField('set GPIO No.');
-    this.appendDummyInput('show')
-      .appendField('to output')
+    this.appendDummyInput('explanation')
+      .appendField('set GPIO No. ')
+      .appendField(new Blockly.FieldNumber(0, 0, 27), 'pin')
+      .appendField('to output ')
       .appendField(new Blockly.FieldDropdown([
           ['high', '1'],
           ['low', '0']

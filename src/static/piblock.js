@@ -10,15 +10,13 @@ python.pythonGenerator.forBlock['average'] = function(block, generator) {
   }
 
 python.pythonGenerator.forBlock['gpio_out_ctl'] = function(block, generator) {
-  // TODO: change Order.ATOMIC to the correct operator precedence strength
-  const value_gpiopin = generator.valueToCode(block, 'gpiopin', python.Order.ATOMIC);
+  const number_pin = block.getFieldValue('pin');
   const dropdown_gpioval = block.getFieldValue('gpioval');
-//  console.log(dropdown_gpioval);
-  // TODO: Assemble javascript into the code variable.
+  // TODO: Assemble python into the code variable.
   const code = 'import pigpio\n'
 	+ 'pi = pigpio.pi()\n'
-	+ 'pi.set_mode(' + value_gpiopin + ', pigpio.OUTPUT)\n'
-	+ 'pi.write(' + value_gpiopin + ', ' + dropdown_gpioval + ')\n';
+	+ 'pi.set_mode(' + number_pin + ', pigpio.OUTPUT)\n'
+	+ 'pi.write(' + number_pin + ',' + dropdown_gpioval + ')\n';
   return code;
 }
 
