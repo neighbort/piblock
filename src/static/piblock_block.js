@@ -18,11 +18,10 @@ Blockly.common.defineBlocks({average: average});
 
 const gpio_out_ctl = {
   init: function() {
-    this.appendValueInput('gpiopin')
-    .setCheck('Number')
-      .appendField('set GPIO No.');
-    this.appendDummyInput('show')
-      .appendField('to output')
+    this.appendDummyInput('explanation')
+      .appendField('set GPIO No. ')
+      .appendField(new Blockly.FieldNumber(0, 0, 27), 'pin')
+      .appendField('to output ')
       .appendField(new Blockly.FieldDropdown([
           ['high', '1'],
           ['low', '0']
@@ -68,6 +67,50 @@ const gpio_read_status = {
 };
 Blockly.common.defineBlocks({gpio_read_status: gpio_read_status});
 
+const gpio_pwm_ctl = {
+  init: function() {
+    this.appendValueInput('duty')
+    .setCheck('Number')
+      .appendField('set  GPIO No. ')
+      .appendField(new Blockly.FieldDropdown([
+          ['12(PWM0)', '12'],
+          ['18(PWM0)', '18'],
+          ['13(PWM1)', '13']
+        ]), 'pin')
+      .appendField('PWM with Duty');
+    this.appendDummyInput('expl1')
+      .appendField('%, and Freq');
+    this.appendValueInput('freq')
+    .setCheck('Number');
+    this.appendDummyInput('expl2')
+      .appendField('Hz');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(210);
+  }
+};
+Blockly.common.defineBlocks({gpio_pwm_ctl: gpio_pwm_ctl});
+
+const gpio_servo_ctl = {
+  init: function() {
+    this.appendDummyInput('explanation')
+      .appendField('set GPIO No. ')
+      .appendField(new Blockly.FieldDropdown([
+          ['12(PWM0)', '12'],
+          ['18(PWM0)', '18'],
+          ['13(PWM1)', '13']
+        ]), 'pin')
+      .appendField('to servo ctl. pulse')
+      .appendField(new Blockly.FieldNumber(0, 0, 2500), 'pulse');
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(75);
+  }
+};
+Blockly.common.defineBlocks({gpio_servo_ctl: gpio_servo_ctl});
+
 const sleep = {
   init: function() {
     this.appendDummyInput('length')
@@ -81,3 +124,113 @@ const sleep = {
   }
 };
 Blockly.common.defineBlocks({sleep: sleep});
+
+const do_nothing = {
+  init: function() {
+    this.appendDummyInput('explanation')
+      .appendField('do nothing');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(45);
+  }
+};
+Blockly.common.defineBlocks({do_nothing: do_nothing});
+
+const test_statement = {
+  init: function() {
+    this.appendValueInput('bol');
+    this.appendDummyInput('exp1')
+      .appendField('IF True');
+    this.appendStatementInput('iftrue')
+      .appendField('do');
+    this.appendDummyInput('exp2')
+      .appendField('IF False');
+    this.appendStatementInput('ifalse')
+      .appendField('do');
+    this.setInputsInline(false)
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({test_statement: test_statement});
+
+const my_PiController = {
+  init: function() {
+    this.appendDummyInput('exp1')
+      .appendField('device_name')
+      .appendField(new Blockly.FieldDropdown([
+          ['Joy-Con', 'Joy-Con'],
+          ['Joy-Con(R)', 'Joy-Con(R)'],
+          ['Joy-Con(L)', 'Joy-Con(L)']
+        ]), 'name');
+    this.appendStatementInput('command')
+      .appendField('set command');
+    this.setInputsInline(false)
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({my_PiController: my_PiController});
+
+
+const button_handler_joyconR = {
+  init: function() {
+    this.appendDummyInput('exp1')
+      .appendField('if button')
+      .appendField(new Blockly.FieldDropdown([
+          ['X', 'NORTH'],
+          ['A', 'EAST'],
+          ['B', 'SOUTH'],
+          ['Y', 'WEST'],
+        ]), 'name')
+      .appendField('is')
+      .appendField(new Blockly.FieldDropdown([
+          ['push', '1'],
+          ['release', '0']
+        ]), 'state');
+    this.appendStatementInput('action')
+      .appendField('do');
+    this.setInputsInline(false)
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({button_handler_joyconR: button_handler_joyconR});
+
+const buton_handler_joyconL = {
+  init: function() {
+    this.appendDummyInput('expl')
+      .appendField('if  button')
+      .appendField(new Blockly.FieldDropdown([
+          ['up', 'UP'],
+          ['right', 'RIGHT'],
+          ['down', 'DOWN'],
+          ['left', 'LEFT'],
+          ['L', 'TL']
+        ]), 'name')
+      .appendField('is')
+      .appendField(new Blockly.FieldDropdown([
+          ['push', '1'],
+          ['release', '0']
+        ]), 'state');
+    this.appendStatementInput('action')
+      .appendField('do');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({buton_handler_joyconL: buton_handler_joyconL});

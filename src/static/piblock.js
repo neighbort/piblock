@@ -10,15 +10,13 @@ python.pythonGenerator.forBlock['average'] = function(block, generator) {
   }
 
 python.pythonGenerator.forBlock['gpio_out_ctl'] = function(block, generator) {
-  // TODO: change Order.ATOMIC to the correct operator precedence strength
-  const value_gpiopin = generator.valueToCode(block, 'gpiopin', python.Order.ATOMIC);
+  const number_pin = block.getFieldValue('pin');
   const dropdown_gpioval = block.getFieldValue('gpioval');
-//  console.log(dropdown_gpioval);
-  // TODO: Assemble javascript into the code variable.
+  // TODO: Assemble python into the code variable.
   const code = 'import pigpio\n'
 	+ 'pi = pigpio.pi()\n'
-	+ 'pi.set_mode(' + value_gpiopin + ', pigpio.OUTPUT)\n'
-	+ 'pi.write(' + value_gpiopin + ', ' + dropdown_gpioval + ')\n';
+	+ 'pi.set_mode(' + number_pin + ', pigpio.OUTPUT)\n'
+	+ 'pi.write(' + number_pin + ',' + dropdown_gpioval + ')\n';
   return code;
 }
 
@@ -41,11 +39,108 @@ python.pythonGenerator.forBlock['gpio_read_status'] = function(block, generator)
   return [code, python.Order.NONE];
 }
 
+python.pythonGenerator.forBlock['gpio_pwm_ctl'] = function(block, generator) {
+  const dropdown_pin = block.getFieldValue('pin');
+  // TODO: change Order.ATOMIC to the correct operator precedence strength
+  const value_duty = generator.valueToCode(block, 'duty', python.Order.ATOMIC);
+  // TODO: change Order.ATOMIC to the correct operator precedence strength
+  const value_freq = generator.valueToCode(block, 'freq', python.Order.ATOMIC);
+  // TODO: Assemble python into the code variable.
+  const code = 'import pigpio\n'
+	+ 'pi = pigpio.pi()\n'
+	+ 'if ' + value_duty + '<0 or 100<' + value_duty + ':\n'
+	+ '\tduty=0\n'
+	+ 'else:\n'
+	+ '\tduty=int(' + value_duty + '*1000000/100)\n'
+	+ 'if ' + value_freq + '<0 or 2e+07<' + value_freq + ':\n'
+	+ '\tfreq=0\n'
+	+ 'else:\n'
+	+ '\tfreq=' + value_freq + '\n'
+	+ 'pi.hardware_PWM(' + dropdown_pin + ', freq, duty)\n';
+  return code;
+}
+
+python.pythonGenerator.forBlock['gpio_servo_ctl'] = function(block, generator) {
+  const dropdown_pin = block.getFieldValue('pin');
+  const number_pulse = block.getFieldValue('pulse');
+  // TODO: Assemble python into the code variable.
+  const code = 'import pigpio\n'
+	+ 'pi = pigpio.pi()\n'
+	+ 'if ' + number_pulse + '<500:\n'
+	+ '\tpi.set_servo_pulsewidth(' + dropdown_pin + ', 0)\n'
+	+ 'else:\n'
+	+ '\tpi.set_servo_pulsewidth(' + dropdown_pin + ', ' + number_pulse + ')\n';
+  return code;
+}
+
 python.pythonGenerator.forBlock['sleep'] = function(block, generator) {
   const number_sec = block.getFieldValue('sec');
   // TODO: Assemble python into the code variable.
 //  const code = 'from time import sleep;';
   const code = 'from time import sleep\n'
 	+ 'sleep(' + number_sec + ')\n';
+  return code;
+}
+
+ython.pythonGenerator.forBlock['do_nothing'] = function(block, generator) {
+  // TODO: Assemble python into the code variable.
+  const code = 'pass';
+  return code;
+}
+
+python.pythonGenerator.forBlock['test_statement'] = function(block, generator) {
+  // TODO: change Order.ATOMIC to the correct operator precedence strength
+  const value_bol = generator.valueToCode(block, 'bol', python.Order.ATOMIC);
+  const statement_iftrue = generator.statementToCode(block, 'iftrue');
+  const statement_ifalse = generator.statementToCode(block, 'ifalse');
+  // TODO: Assemble python into the code variable.
+  const code = 'print("start")\n'
+	+ 'if ' + value_bol + ' == True:\n'
+	+ statement_iftrue + '\n'
+	+ 'elif ' + value_bol + ' == False:\n'
+	+ statement_ifalse + '\n';
+  return code;
+}
+
+python.pythonGenerator.forBlock['my_PiController'] = function(block, generator) {
+  const dropdown_name = block.getFieldValue('name');
+  const statement_command = generator.statementToCode(block, 'command');
+  // TODO: Assemble python into the code variable.
+  const code = 'from evdev import InputDevice, categorize, ecodes, list_devices\n'
+	+ 'print(list_devices())\n'
+	+ 'joycon = False\n'
+	+ 'for path in list_devices():\n'
+	+ '\tprint(InputDevice(path).name, path)\n'
+	+ '\tif "' + dropdown_name + '" in InputDevice(path).name:\n'
+	+ '\t\tjoycon = InputDevice(path)\n'
+	+ '\t\tjoycon_name = joycon.name\n'
+	+ '\t\tbreak\n'
+	+ 'print("Failed, please connect the Joy-Con to RaspberryPi") if not joycon else print("success")\n'
+	+ 'for event in joycon.read_loop():\n'
+	+ statement_command + '\n';
+  return code;
+}
+
+python.pythonGenerator.forBlock['button_handler_joyconR'] = function(block, generator) {
+  const dropdown_name = block.getFieldValue('name');
+  const dropdown_state = block.getFieldValue('state');
+  const statement_action = generator.statementToCode(block, 'action');
+  // TODO: Assemble python into the code variable.
+  const code = 'keyev = categorize(event)\n'
+	+ 'print(keyev)\n'
+	+ 'if (event.type==ecodes.EV_KEY) and any("' + dropdown_name + '" in each for each in keyev.keycode) and (keyev.keystate==' + dropdown_state + '):\n'
+	+ statement_action + '\n';
+  return code;
+}
+
+python.pythonGenerator.forBlock['buton_handler_joyconL'] = function(block, generator) {
+  const dropdown_name = block.getFieldValue('name');
+  const dropdown_state = block.getFieldValue('state');
+  const statement_action = generator.statementToCode(block, 'action');
+  // TODO: Assemble python into the code variable.
+  const code = 'keyev = categorize(event)\n'
+	+ 'print(keyev)\n'
+	+ 'if (event.type==ecodes.EV_KEY) and ("' + dropdown_name + '" in keyev.keycode) and (keyev.keystate==' + dropdown_state + '):\n'
+	+ statement_action + '\n';
   return code;
 }
