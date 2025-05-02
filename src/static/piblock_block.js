@@ -162,27 +162,43 @@ Blockly.common.defineBlocks({test_statement: test_statement});
 const my_PiController = {
   init: function() {
     this.appendDummyInput('exp1')
-      .appendField('device_name')
+      .appendField('my PiController with ')
       .appendField(new Blockly.FieldDropdown([
           ['Joy-Con', 'Joy-Con'],
           ['Joy-Con(R)', 'Joy-Con(R)'],
           ['Joy-Con(L)', 'Joy-Con(L)']
         ]), 'name');
     this.appendStatementInput('command')
-      .appendField('set command');
+      .appendField('command set');
     this.setInputsInline(false)
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(225);
+    this.setColour(270);
   }
 };
 Blockly.common.defineBlocks({my_PiController: my_PiController});
 
+const cmd_distributor = {
+  init: function() {
+    this.appendStatementInput('btn_cmd')
+      .appendField('Button cmd');
+    this.appendStatementInput('jst_cmd')
+      .appendField('JoyStick cmd');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(270);
+  }
+};
+Blockly.common.defineBlocks({cmd_distributor: cmd_distributor});
 
 const button_handler_joyconR = {
   init: function() {
+    this.appendDummyInput('showside')
+      .appendField('Joy-Con R');
     this.appendDummyInput('exp1')
       .appendField('if button')
       .appendField(new Blockly.FieldDropdown([
@@ -203,13 +219,15 @@ const button_handler_joyconR = {
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(225);
+    this.setColour(315);
   }
 };
 Blockly.common.defineBlocks({button_handler_joyconR: button_handler_joyconR});
 
 const buton_handler_joyconL = {
   init: function() {
+    this.appendDummyInput('showside')
+      .appendField('Joy-Con L');
     this.appendDummyInput('expl')
       .appendField('if  button')
       .appendField(new Blockly.FieldDropdown([
@@ -230,7 +248,31 @@ const buton_handler_joyconL = {
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(225);
+    this.setColour(315);
   }
 };
 Blockly.common.defineBlocks({buton_handler_joyconL: buton_handler_joyconL});
+
+const button_value = {
+  init: function() {
+    this.appendDummyInput('btnval')
+      .appendField('Button input');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(315);
+  }
+};
+Blockly.common.defineBlocks({button_value: button_value});
+
+const joystick_value = {
+  init: function() {
+    this.appendDummyInput('jskval')
+      .appendField('JoyStick Input');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({joystick_value: joystick_value});
