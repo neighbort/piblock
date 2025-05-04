@@ -16,6 +16,49 @@ const average = {
 };
 Blockly.common.defineBlocks({average: average});
 
+const class4logic = {
+  init: function() {
+    this.appendDummyInput('expl')
+      .appendField(new Blockly.FieldDropdown([
+          ['int', 'int'],
+          ['float', 'float'],
+          ['str', 'str'],
+          ['list', 'list']
+        ]), 'class');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(210);
+  }
+};
+Blockly.common.defineBlocks({class4logic: class4logic});
+
+const get_listelem = {
+  init: function() {
+    this.appendValueInput('list')
+    .setCheck('Array')
+      .appendField(new Blockly.FieldNumber(0), 'index')
+      .appendField('th element of');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(270);
+  }
+};
+Blockly.common.defineBlocks({get_listelem: get_listelem});
+
+const typeof_var = {
+  init: function() {
+    this.appendValueInput('variable')
+      .appendField('type of');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(135);
+  }
+};
+Blockly.common.defineBlocks({typeof_var: typeof_var});
+
 const gpio_out_ctl = {
   init: function() {
     this.appendDummyInput('explanation')
@@ -30,7 +73,7 @@ const gpio_out_ctl = {
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(0);
+    this.setColour(75);
   }
 };
 Blockly.common.defineBlocks({gpio_out_ctl: gpio_out_ctl});
@@ -49,7 +92,7 @@ const gpio_set_read = {
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(225);
+    this.setColour(75);
   }
 };
 Blockly.common.defineBlocks({gpio_set_read: gpio_set_read});
@@ -62,7 +105,7 @@ const gpio_read_status = {
     this.setOutput(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(225);
+    this.setColour(75);
   }
 };
 Blockly.common.defineBlocks({gpio_read_status: gpio_read_status});
@@ -88,7 +131,7 @@ const gpio_pwm_ctl = {
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(210);
+    this.setColour(75);
   }
 };
 Blockly.common.defineBlocks({gpio_pwm_ctl: gpio_pwm_ctl});

@@ -9,6 +9,33 @@ python.pythonGenerator.forBlock['average'] = function(block, generator) {
     return [code, python.Order.NONE];
   }
 
+python.pythonGenerator.forBlock['class4logic'] = function(block, generator) {
+  const dropdown_class = block.getFieldValue('class');
+  // TODO: Assemble python into the code variable.
+  const code = dropdown_class;
+  // TODO: Change Order.NONE to the correct operator precedence strength
+  return [code, python.Order.NONE];
+}
+
+python.pythonGenerator.forBlock['get_listelem'] = function(block, generator) {
+  const number_index = block.getFieldValue('index');
+  // TODO: change Order.ATOMIC to the correct operator precedence strength
+  const value_list = generator.valueToCode(block, 'list', python.Order.ATOMIC);
+  // TODO: Assemble python into the code variable.
+  const code = value_list + '[' + number_index + ']';
+  // TODO: Change Order.NONE to the correct operator precedence strength
+  return [code, python.Order.NONE];
+}
+
+python.pythonGenerator.forBlock['typeof_var'] = function(block, generator) {
+  // TODO: change Order.ATOMIC to the correct operator precedence strength
+  const value_variable = generator.valueToCode(block, 'variable', python.Order.ATOMIC);
+  // TODO: Assemble python into the code variable.
+  const code = 'type(' + value_variable + ')';
+  // TODO: Change Order.NONE to the correct operator precedence strength
+  return [code, python.Order.NONE];
+}
+
 python.pythonGenerator.forBlock['gpio_out_ctl'] = function(block, generator) {
   const number_pin = block.getFieldValue('pin');
   const dropdown_gpioval = block.getFieldValue('gpioval');
