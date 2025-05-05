@@ -16,6 +16,49 @@ const average = {
 };
 Blockly.common.defineBlocks({average: average});
 
+const class4logic = {
+  init: function() {
+    this.appendDummyInput('expl')
+      .appendField(new Blockly.FieldDropdown([
+          ['int', 'int'],
+          ['float', 'float'],
+          ['str', 'str'],
+          ['list', 'list']
+        ]), 'class');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(210);
+  }
+};
+Blockly.common.defineBlocks({class4logic: class4logic});
+
+const get_listelem = {
+  init: function() {
+    this.appendValueInput('list')
+    .setCheck('Array')
+      .appendField(new Blockly.FieldNumber(0), 'index')
+      .appendField('th element of');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(270);
+  }
+};
+Blockly.common.defineBlocks({get_listelem: get_listelem});
+
+const typeof_var = {
+  init: function() {
+    this.appendValueInput('variable')
+      .appendField('type of');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(135);
+  }
+};
+Blockly.common.defineBlocks({typeof_var: typeof_var});
+
 const gpio_out_ctl = {
   init: function() {
     this.appendDummyInput('explanation')
@@ -30,7 +73,7 @@ const gpio_out_ctl = {
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(0);
+    this.setColour(75);
   }
 };
 Blockly.common.defineBlocks({gpio_out_ctl: gpio_out_ctl});
@@ -49,7 +92,7 @@ const gpio_set_read = {
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(225);
+    this.setColour(75);
   }
 };
 Blockly.common.defineBlocks({gpio_set_read: gpio_set_read});
@@ -62,7 +105,7 @@ const gpio_read_status = {
     this.setOutput(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(225);
+    this.setColour(75);
   }
 };
 Blockly.common.defineBlocks({gpio_read_status: gpio_read_status});
@@ -88,7 +131,7 @@ const gpio_pwm_ctl = {
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(210);
+    this.setColour(75);
   }
 };
 Blockly.common.defineBlocks({gpio_pwm_ctl: gpio_pwm_ctl});
@@ -162,27 +205,43 @@ Blockly.common.defineBlocks({test_statement: test_statement});
 const my_PiController = {
   init: function() {
     this.appendDummyInput('exp1')
-      .appendField('device_name')
+      .appendField('my PiController with ')
       .appendField(new Blockly.FieldDropdown([
           ['Joy-Con', 'Joy-Con'],
           ['Joy-Con(R)', 'Joy-Con(R)'],
           ['Joy-Con(L)', 'Joy-Con(L)']
         ]), 'name');
     this.appendStatementInput('command')
-      .appendField('set command');
+      .appendField('command set');
     this.setInputsInline(false)
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(225);
+    this.setColour(270);
   }
 };
 Blockly.common.defineBlocks({my_PiController: my_PiController});
 
+const cmd_distributor = {
+  init: function() {
+    this.appendStatementInput('btn_cmd')
+      .appendField('Button cmd');
+    this.appendStatementInput('jst_cmd')
+      .appendField('JoyStick cmd');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(270);
+  }
+};
+Blockly.common.defineBlocks({cmd_distributor: cmd_distributor});
 
 const button_handler_joyconR = {
   init: function() {
+    this.appendDummyInput('showside')
+      .appendField('Joy-Con R');
     this.appendDummyInput('exp1')
       .appendField('if button')
       .appendField(new Blockly.FieldDropdown([
@@ -203,13 +262,15 @@ const button_handler_joyconR = {
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(225);
+    this.setColour(315);
   }
 };
 Blockly.common.defineBlocks({button_handler_joyconR: button_handler_joyconR});
 
 const buton_handler_joyconL = {
   init: function() {
+    this.appendDummyInput('showside')
+      .appendField('Joy-Con L');
     this.appendDummyInput('expl')
       .appendField('if  button')
       .appendField(new Blockly.FieldDropdown([
@@ -230,7 +291,31 @@ const buton_handler_joyconL = {
     this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.setColour(225);
+    this.setColour(315);
   }
 };
 Blockly.common.defineBlocks({buton_handler_joyconL: buton_handler_joyconL});
+
+const button_value = {
+  init: function() {
+    this.appendDummyInput('btnval')
+      .appendField('Button input');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(315);
+  }
+};
+Blockly.common.defineBlocks({button_value: button_value});
+
+const joystick_value = {
+  init: function() {
+    this.appendDummyInput('jskval')
+      .appendField('JoyStick Input');
+    this.setOutput(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.setColour(225);
+  }
+};
+Blockly.common.defineBlocks({joystick_value: joystick_value});

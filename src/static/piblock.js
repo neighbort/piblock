@@ -9,6 +9,33 @@ python.pythonGenerator.forBlock['average'] = function(block, generator) {
     return [code, python.Order.NONE];
   }
 
+python.pythonGenerator.forBlock['class4logic'] = function(block, generator) {
+  const dropdown_class = block.getFieldValue('class');
+  // TODO: Assemble python into the code variable.
+  const code = dropdown_class;
+  // TODO: Change Order.NONE to the correct operator precedence strength
+  return [code, python.Order.NONE];
+}
+
+python.pythonGenerator.forBlock['get_listelem'] = function(block, generator) {
+  const number_index = block.getFieldValue('index');
+  // TODO: change Order.ATOMIC to the correct operator precedence strength
+  const value_list = generator.valueToCode(block, 'list', python.Order.ATOMIC);
+  // TODO: Assemble python into the code variable.
+  const code = value_list + '[' + number_index + ']';
+  // TODO: Change Order.NONE to the correct operator precedence strength
+  return [code, python.Order.NONE];
+}
+
+python.pythonGenerator.forBlock['typeof_var'] = function(block, generator) {
+  // TODO: change Order.ATOMIC to the correct operator precedence strength
+  const value_variable = generator.valueToCode(block, 'variable', python.Order.ATOMIC);
+  // TODO: Assemble python into the code variable.
+  const code = 'type(' + value_variable + ')';
+  // TODO: Change Order.NONE to the correct operator precedence strength
+  return [code, python.Order.NONE];
+}
+
 python.pythonGenerator.forBlock['gpio_out_ctl'] = function(block, generator) {
   const number_pin = block.getFieldValue('pin');
   const dropdown_gpioval = block.getFieldValue('gpioval');
@@ -82,7 +109,7 @@ python.pythonGenerator.forBlock['sleep'] = function(block, generator) {
   return code;
 }
 
-ython.pythonGenerator.forBlock['do_nothing'] = function(block, generator) {
+python.pythonGenerator.forBlock['do_nothing'] = function(block, generator) {
   // TODO: Assemble python into the code variable.
   const code = 'pass';
   return code;
@@ -121,13 +148,24 @@ python.pythonGenerator.forBlock['my_PiController'] = function(block, generator) 
   return code;
 }
 
+python.pythonGenerator.forBlock['cmd_distributor'] = function(block, generator) {
+  const statement_btn_cmd = generator.statementToCode(block, 'btn_cmd');
+  const statement_jst_cmd = generator.statementToCode(block, 'jst_cmd');
+  // TODO: Assemble python into the code variable.
+  const code = 'if event.type == ecodes.EV_KEY:\n'
+	+ statement_btn_cmd + '\n'
+	+ 'elif event.type == ecodes.EV_ABS:\n'
+	+ statement_jst_cmd + '\n';
+  return code;
+}
+
 python.pythonGenerator.forBlock['button_handler_joyconR'] = function(block, generator) {
   const dropdown_name = block.getFieldValue('name');
   const dropdown_state = block.getFieldValue('state');
   const statement_action = generator.statementToCode(block, 'action');
   // TODO: Assemble python into the code variable.
   const code = 'keyev = categorize(event)\n'
-	+ 'print(keyev)\n'
+//	+ 'print(keyev)\n'
 	+ 'if (event.type==ecodes.EV_KEY) and any("' + dropdown_name + '" in each for each in keyev.keycode) and (keyev.keystate==' + dropdown_state + '):\n'
 	+ statement_action + '\n';
   return code;
@@ -139,8 +177,22 @@ python.pythonGenerator.forBlock['buton_handler_joyconL'] = function(block, gener
   const statement_action = generator.statementToCode(block, 'action');
   // TODO: Assemble python into the code variable.
   const code = 'keyev = categorize(event)\n'
-	+ 'print(keyev)\n'
+//	+ 'print(keyev)\n'
 	+ 'if (event.type==ecodes.EV_KEY) and ("' + dropdown_name + '" in keyev.keycode) and (keyev.keystate==' + dropdown_state + '):\n'
 	+ statement_action + '\n';
   return code;
+}
+
+python.pythonGenerator.forBlock['button_value'] = function(block, generator) {
+  // TODO: Assemble python into the code variable.
+  const code = '[categorize(event).keycode, event.value]';
+  // TODO: Change Order.NONE to the correct operator precedence strength
+  return [code, python.Order.NONE];
+}
+
+python.pythonGenerator.forBlock['joystick_value'] = function(block, generator) {
+  // TODO: Assemble python into the code variable.
+  const code = '[ecodes.ABS[event.code], event.value]';
+  // TODO: Change Order.NONE to the correct operator precedence strength
+  return [code, python.Order.NONE];
 }
