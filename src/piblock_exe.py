@@ -72,13 +72,13 @@ def stream_exec_code(code, output_queue):
         def flush(self):
             pass
     sys.stdout = StreamRedirector()
-    output_queue.put("\n***** Run Program You Built! *****")
+    output_queue.put("\n***** Run Program You Built! *****\n")
     try:
         exec(code)
     except Exception as e:
         output_queue.put(f"Error: {str(e)}")
     finally:
-        output_queue.put("+++++ Finish +++++")
+        output_queue.put("+++++ Finish +++++\n")
         mygpio.set_gpio_default()
         output_queue.put("__end__")
 
@@ -114,7 +114,6 @@ def stop_code():
 
 @app.route("/scan-connect", methods=["POST"])
 def scan_connect():
-    print("here comes the sun")
     stdout = myblue.scan_and_connect_to_joycon()
     return jsonify({"result": stdout})
 

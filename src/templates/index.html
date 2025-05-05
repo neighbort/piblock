@@ -23,16 +23,13 @@
     <script src="/static/piblock.js"></script>
     <script src="/static/piblock_block.js"> </script>
 
-    <!-- add 0331 -->
     <script>
-//	const socket = io("wss://192.168.11.11:334");
 	const socket = io();
 
 	socket.on("output", (data) => {
             console.log(data);
         });
     </script>
-    <!-- add 0331 -->
 
     <style>
       body {
@@ -58,22 +55,17 @@
   </head>
   <body>
     <p>
-      This is a simple demo of generating and exec code from blocks
+      The Hatchbox
     </p>
     <div id="pageContainer">
       <div id="consoleDiv">
         <p>
           <button onclick="showCode()">Show Python Code</button>
-          <!--
-          <button onclick="runCode()">Run JavaScript</button>
-          <form action='/jsonrpi' method='post'>
-            <input id='example' type='hidden' name='name'>
-  	  <input type='submit' value='Run JS on Rpi' onclick="returnCode()">
-          </form>
-          -->
-          <button onclick="run_python()" class="btn btn-primary btn-custom-rounded btn-dark mt-5">Run on Rpi</button>
-          <button onclick="sendCode()">Run on Rpi socket</button>
+          <!--button onclick="run_python()">Run on Rpi test mode</button-->
+          <button onclick="sendCode()">Run on Rpi</button>
           <button onclick="terminateCode()">Terminate</button>
+	</p>
+	<p>
           <button onclick="saveBlock()">Save Block</button>
           <button onclick="loadBlock()">Open Block</button>
         </p>
@@ -441,7 +433,16 @@
           blocks: [
             {
               type: 'text_print',
-	      inputs: {},
+	      inputs: {
+		TEXT: {
+		  block: {
+		    type: 'text',
+		    fields: {
+		      TEXT: "Hello World!",
+		    },
+		  },
+		},
+	      },
             },
           ],
         },
@@ -476,8 +477,6 @@
             	python.pythonGenerator.INFINITE_LOOP_TRAP = null;
 		var code =
           	  python.pythonGenerator.workspaceToCode(demoWorkspace);
-//		const outputElm = document.getElementByID("output");
-//		outputElm.textContent += "***** Run Program *****"
 		socket.emit('run_code', code);
         }
 
@@ -558,23 +557,31 @@
 
       async function ConnJoyCon() {
 	alert('make Joy-Con stand-by mode');
+	const outputElem = document.getElementById("output");
+	outputElem.textContent += "\n" + "scannning Joy-Con... ";
 	const res = await fetch("/scan-connect", {
 	  method: "POST",
 	  headers: { "Content-Type": "application/json"},
 	});
 	const result = await res.json();
 	console.log(result.result || result.error);
+	outputElem.textContent += result.result || result.error;
+	outputElem.scrollTop = outputElem.scrollHeight;
       }
 
       async function connect(mac) {
 	alert('make device stand-by mode');
-        const res = await fetch("/connect", {
+        const outputElem = document.getElementById("output");
+	outputElem.textContent += "\n" + "scanning Joy-Con... ";
+	const res = await fetch("/connect", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ mac: mac })
         });
         const result = await res.json();
         console.log(result.result || result.error);
+	outputElem.textContent += result.result || result.error;
+	outputElem.scrollTop = outputElem.scrollHeight;
       }
 
       async function disconnect(mac) {
@@ -585,17 +592,23 @@
         });
         const result = await res.json();
         console.log(result.result || result.error);
+	const outputElem = document.getElementById("output");
+	outputElem.textContent += result.result || result.error;
+	outputElem.scrollTop = outputElem.scrollHeight;
       }
 
       async function remove(mac) {
         const res = await fetch("/remove", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mac: mac })
-      });
-      const result = await res.json();
-      console.log(result.result || result.error);
-      getPaired(); // リストを更新
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ mac: mac })
+        });
+        const result = await res.json();
+        console.log(result.result || result.error);
+        const outputElem = document.getElementById("output");
+	outputElem.textContent += result.result || result.error;
+	outputElem.scrollTop = outputElem.scrollHeight;
+        getPaired(); // リストを更新
       }
 
     </script>
