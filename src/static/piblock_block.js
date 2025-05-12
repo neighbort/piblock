@@ -147,6 +147,8 @@ const gpio_servo_ctl = {
         ]), 'pin')
       .appendField('to servo ctl. pulse')
       .appendField(new Blockly.FieldNumber(0, 0, 2500), 'pulse');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
     this.setColour(75);
@@ -289,7 +291,7 @@ const buton_handler_joyconL = {
       .appendField('do');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setTooltip('');
+    this.setTooltip('controller shall be vertical handed');
     this.setHelpUrl('');
     this.setColour(315);
   }
